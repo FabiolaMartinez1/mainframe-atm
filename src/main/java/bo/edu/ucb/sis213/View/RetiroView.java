@@ -49,36 +49,31 @@ public class RetiroView {
                 aceptarButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        String cantidadStr = cantidadField.getText();
-                        if(bl.saldoSuficiente(cantidadStr)){
-                            int opre = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de retirar "+cantidadStr+" Bs. ?", "Confirmar", JOptionPane.YES_NO_OPTION);
-                            if (opre == JOptionPane.YES_OPTION) {
-                                try {
+                        try {
+                            String cantidadStr = cantidadField.getText();
+                            if(bl.comprobarCantidad(cantidadStr,2)){//comprobar campo
+                                int opre = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de retirar "+cantidadStr+" Bs. ?", "Confirmar", JOptionPane.YES_NO_OPTION);
+                                if (opre == JOptionPane.YES_OPTION) {
                                     if(bl.realizarRetiro(cantidadStr)){
-                                        System.out.println(bl.getSaldo()+"view");
                                         JOptionPane.showMessageDialog(null, "Retiro realizado con \u00E9xito. Su nuevo saldo es: " + bl.getSaldo()+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                                         close();
                                     }else{
                                         JOptionPane.showMessageDialog(frame, bl.getTextoE(), bl.getTituloE(), JOptionPane.WARNING_MESSAGE);
                                         return;
                                     }
-                                } catch (Exception ex) {
-                                    System.out.println("Error Ss TT");
-                                    ex.printStackTrace();
-                                    JOptionPane.showMessageDialog(null, "Error al realizar el dep\retiro: "+ex, "Error", JOptionPane.ERROR_MESSAGE);
-                                    close();
+                                    System.out.println("Saldo==" + bl.getSaldo());
+                                }else if (opre == JOptionPane.NO_OPTION) {
+                                    System.out.println("\nNo continuar con el retiro");
+                                    return;
                                 }
-                                System.out.println("\nDepósito==" + bl.getSaldo());
-                                
-                            }else if (opre == JOptionPane.NO_OPTION) {
-                                System.out.println("\nNo continuar con el deposito");
+                            }else{
+                                JOptionPane.showMessageDialog(frame, bl.getTextoE(), bl.getTituloE(), JOptionPane.WARNING_MESSAGE);
                                 return;
                             }
-                        }else{
-                            JOptionPane.showMessageDialog(null, "Su saldo insuficiente", "Saldo", JOptionPane.WARNING_MESSAGE);
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(frame, "Monto no v\u00E1lido \n"+ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            close();
                         }
-                    
-                        
                     }
                 });
         frame.setVisible(true);

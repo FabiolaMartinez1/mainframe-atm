@@ -62,7 +62,7 @@ public class MenuView {
         changePinButton.setBounds(518, 118, 259, 102);
         changePinButton.setBorder(new LineBorder(new Color(0, 139, 139), 5, true));
         
-        exitButton = new JButton("Cerrar Sesi\u00F3n");
+        exitButton = new JButton("Cerrar sesi\u00F3n");
         exitButton.setFont(new Font("Tahoma", Font.BOLD, 15));
         exitButton.setBounds(234, 409, 396, 48);
 

@@ -46,18 +46,21 @@ public class LoginView {
                 try {
                     String user = userField.getText();
                     String pin=new String(pinField.getPassword());
-                    if (bl2.validarLoginBL(user, pin)) {
+                    if (bl2.validarLoginBL(user, pin)) {//valida campos vacios y si existe en la BDD
                         close();
                         new MenuView(bl2);
                         System.out.println("ABRIMOS MENU :D");
                     }else{
                         JOptionPane.showMessageDialog(frame, bl2.getTextoE(), bl2.getTituloE(), JOptionPane.WARNING_MESSAGE);
-                        // JOptionPane.showMessageDialog(frame, util.getTexto(), util.getTitulo(), JOptionPane.WARNING_MESSAGE);
-                        return;
+                        if(bl2.getIntentosRestantes()<=0){
+                            System.exit(0);
+                        }else{
+                            return;
+                        }
                     }
                 } catch (Exception ex) {
-                    // JOptionPane.showMessageDialog(null, ex.getMessage());
-                    JOptionPane.showMessageDialog(frame, "Campos no v\u00E1lidos", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
+                    close();
                 }
             }
         });

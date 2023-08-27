@@ -59,30 +59,19 @@ public class CambiarPinView {
                         aceptarButton.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                String nuevoPinStr = String.valueOf(nuevoPinField.getPassword());
-                                String confirmarNuevoPinStr = String.valueOf(confirmarPinField.getPassword());
                                 try {
-                                    if(bl.validarCambioPIN(nuevoPinStr,confirmarNuevoPinStr)){
-                                        
+                                    String nuevoPinStr = String.valueOf(nuevoPinField.getPassword());
+                                    String confirmarNuevoPinStr = String.valueOf(confirmarPinField.getPassword());
+                                    if(bl.validarCambioPIN(nuevoPinStr, confirmarNuevoPinStr)){//valida campos vacios, comprobar si son iguales, si no se repite el pin anterior
                                         int oppin = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de cambiar de PIN", "Confirmar", JOptionPane.YES_NO_OPTION);
                                         if (oppin == JOptionPane.YES_OPTION) {
-                                            try {
-                                                if(bl.cambiarPIN(nuevoPinStr)){
-                                                    System.out.println(bl.getSaldo()+"view");
-                                                    JOptionPane.showMessageDialog(null, "Cambio de pin realizado con \u00E9xito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                                                    close();
-                                                }else{
-                                                    JOptionPane.showMessageDialog(frame, bl.getTextoE(), bl.getTituloE(), JOptionPane.WARNING_MESSAGE);
-                                                    return;
-                                                }
-                                            } catch (Exception ex) {
-                                                System.out.println("Error Ss TT");
-                                                ex.printStackTrace();
-                                                JOptionPane.showMessageDialog(null, "Error al realizar el cambio de pin: "+ex, "Error", JOptionPane.ERROR_MESSAGE);
+                                            if(bl.cambiarPIN(nuevoPinStr)){
+                                                JOptionPane.showMessageDialog(null, "Cambio de pin realizado con \u00E9xito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                                                 close();
+                                            }else{
+                                                JOptionPane.showMessageDialog(frame, bl.getTextoE(), bl.getTituloE(), JOptionPane.WARNING_MESSAGE);
+                                                return;
                                             }
-                                            System.out.println("\nDepósito==" + bl.getSaldo());
-                                            
                                         }else if (oppin == JOptionPane.NO_OPTION) {
                                             System.out.println("\nNo continuar con el cambio");
                                             return;
@@ -92,9 +81,7 @@ public class CambiarPinView {
                                         return;
                                     }
                                 } catch (Exception ex) {
-                                    System.out.println("Ayuda Sofia TT.");
-                                    ex.printStackTrace();
-                                    JOptionPane.showMessageDialog(null, "Error: "+ex, "Error", JOptionPane.ERROR_MESSAGE);
+                                    JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error",JOptionPane.ERROR_MESSAGE);
                                     close();
                                 }
                             }

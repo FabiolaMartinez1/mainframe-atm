@@ -4,8 +4,6 @@ import javax.swing.*;
 
 import bo.edu.ucb.sis213.bl.AtmBL;
 
-// import bo.edu.ucb.sis213.Controller.Controller;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,29 +48,31 @@ public class DepositoView {
         aceptarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String cantidadStr = cantidadField.getText();
-                int opdep = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de dep\u00F3sitar "+cantidadStr+" Bs. ?", "Confirmar", JOptionPane.YES_NO_OPTION);
-                if (opdep == JOptionPane.YES_OPTION) {
-                    try {
-                        System.out.println("cant: "+cantidadStr);
-                        if(bl.realizarDeposito(cantidadStr)){//si guardo?
-                            JOptionPane.showMessageDialog(null, "Dep\u00F3sito realizado con \u00E9xito. Su nuevo saldo es: " + bl.getSaldo()+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                            close();
-                        }else{
-                            JOptionPane.showMessageDialog(frame, bl.getTextoE(), bl.getTituloE(), JOptionPane.WARNING_MESSAGE);
+                try {
+                    String cantidadStr = cantidadField.getText();
+                    if(bl.comprobarCantidad(cantidadStr,1)){//comprobar campo
+                        int opdep = JOptionPane.showConfirmDialog(null, "\u00BFEsta seguro de dep\u00F3sitar "+cantidadStr+" Bs. ?", "Confirmar", JOptionPane.YES_NO_OPTION);
+                        if (opdep == JOptionPane.YES_OPTION) {
+                            System.out.println("cant: "+cantidadStr);
+                            if(bl.realizarDeposito(cantidadStr)){//si guardo?
+                                JOptionPane.showMessageDialog(null, "Dep\u00F3sito realizado con \u00E9xito. Su nuevo saldo es: " + bl.getSaldo()+" Bs.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                                close();
+                            }else{
+                                JOptionPane.showMessageDialog(frame, bl.getTextoE(), bl.getTituloE(), JOptionPane.WARNING_MESSAGE);
+                                return;
+                            }   
+                        }else if (opdep == JOptionPane.NO_OPTION) {
+                            System.out.println("\nNo continuar con el deposito");
                             return;
-                        }   
-                    } catch (Exception ex) {
-                        System.out.println("Error S TT");
-                        ex.printStackTrace();
-                        JOptionPane.showMessageDialog(null, "Error al realizar el dep\u00F3sito: "+ex, "Error", JOptionPane.ERROR_MESSAGE);
-                        close();
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(frame, bl.getTextoE(), bl.getTituloE(), JOptionPane.WARNING_MESSAGE);
+                        return;
                     }
-                }else if (opdep == JOptionPane.NO_OPTION) {
-                    System.out.println("\nNo continuar con el deposito");
-                    return;
-                }
-                
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(frame, "Monto no v\u00E1lido \n"+ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    close();
+                }               
             }
         });
         frame.setVisible(true);
